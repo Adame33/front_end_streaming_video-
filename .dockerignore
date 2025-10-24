@@ -1,14 +1,8 @@
 node_modules
-.next
-out
-dist
+.next/cache
 .git
 .gitignore
-Dockerfile*
-docker-compose*.yml
+Dockerfile
 README.md
-npm-debug.log*
-yarn.lock
-pnpm-lock.yaml
-.vscode
+npm-debug.log
 .env*
