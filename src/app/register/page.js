@@ -18,7 +18,7 @@ export default function RegisterPage() {
               Crea tu cuenta
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Habilita acceso a la consola de administración de NovaStream.
+              Habilita acceso a la consola de administración de APP Streeam.
             </Typography>
           </Box>
           <RegisterForm />

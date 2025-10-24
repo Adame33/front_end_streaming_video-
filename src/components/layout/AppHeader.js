@@ -48,13 +48,16 @@ export default function AppHeader() {
       position="fixed"
       elevation={0}
       sx={{
-        ml: "240px",
-        width: `calc(100% - 240px)`,
+        ml: "180px",
+        width: `calc(100% - 180px)`,
         color: "text.primary",
       }}
     >
-      <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Box>
+      <Toolbar sx={{ display: "flex", justifyContent: "center", alignItems: "center", position: "relative", minHeight: 64 }}>
+        <Box sx={{ position: "absolute", left: 0, display: "flex", alignItems: "center", height: 1, pl: 3 }}>
+          {/* Espacio reservado para posibles elementos a la izquierda */}
+        </Box>
+        <Box sx={{ textAlign: "center" }}>
           <Typography variant="h6" component="div" fontWeight={700}>
             Panel de streaming
           </Typography>
@@ -62,7 +65,7 @@ export default function AppHeader() {
             Administración en tiempo real
           </Typography>
         </Box>
-        <Box display="flex" alignItems="center" gap={2}>
+        <Box sx={{ position: "absolute", right: 0, display: "flex", alignItems: "center", gap: 2, pr: 3 }}>
           <Button component={Link} href="/webinars" variant="contained" color="primary">
             Nuevo webinar
           </Button>

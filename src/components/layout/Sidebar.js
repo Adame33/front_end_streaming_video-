@@ -60,7 +60,7 @@ export default function Sidebar() {
           </Box>
           <Box>
             <Typography variant="h6" component="div" fontWeight={700}>
-              NovaStream
+              APP Streeam
             </Typography>
             <Typography variant="caption" color="text.secondary">
               Control streaming

@@ -13,7 +13,7 @@ export default function AppLayout({ children }) {
         component="main"
         sx={{
           flexGrow: 1,
-          ml: "240px",
+         
           mt: "64px",
           minHeight: "100vh",
           backgroundColor: "transparent",

@@ -15,7 +15,7 @@ export default function LoginPage() {
         <Paper elevation={0} sx={{ p: 5, borderRadius: 4 }}>
           <Box textAlign="center" mb={4}>
             <Typography variant="h4" fontWeight={700} gutterBottom>
-              NovaStream Admin
+              APP Streeam Admin
             </Typography>
             <Typography variant="body2" color="text.secondary">
               Accede a tu panel para gestionar la experiencia de streaming.
