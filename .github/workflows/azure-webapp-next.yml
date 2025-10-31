@@ -16,16 +16,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 1) Construir con Oryx (aquí se hace npm install + npm run build)
+      # 1) Build con Oryx en GitHub
       - name: Build web app with Oryx
         uses: azure/appservice-build@v3
         with:
-          platform: node
-          platform-version: 20
+          platform: nodejs          # 👈 no 'node'
+          platform-version: 18      # 👈 versión que sí tiene ese Oryx
           source-directory: .
           output-directory: .
 
-      # 2) Desplegar lo que dejó el paso anterior
+      # 2) Deploy al App Service
       - name: Deploy to Azure WebApp
         uses: azure/webapps-deploy@v3
         with:
