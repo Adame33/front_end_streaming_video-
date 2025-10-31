@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: xicocentral-01
+  AZURE_WEBAPP_NAME: git-hub-app
   NODE_VERSION: 22.x
 
 jobs:
