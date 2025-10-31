@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: git-hub-app
+  AZURE_WEBAPP_NAME: git-hub-app-next
   NODE_VERSION: 22.x
 
 jobs:
