@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001/api";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://git-hub-api-fufgfgg8dyhxdsa6.mexicocentral-01.azurewebsites.net/api";
 
 async function handleResponse(response) {
   const contentType = response.headers.get("content-type");
