@@ -1,4 +1,4 @@
-name: CI/CD - Next.js to Azure
+name: CI/CD - Next.js to Azure (con node_modules)
 
 on:
   push:
@@ -7,28 +7,54 @@ on:
 
 env:
   AZURE_WEBAPP_NAME: git-hub-app
+  NODE_VERSION: '22.x'   # puedes dejarlo en 22.x si quieres
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # 1) Build con Oryx en GitHub
-      - name: Build web app with Oryx
-        uses: azure/appservice-build@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v4
         with:
-          platform: nodejs          # 👈 no 'node'
-          platform-version: 18      # 👈 versión que sí tiene ese Oryx
-          source-directory: .
-          output-directory: .
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
 
-      # 2) Deploy al App Service
-      - name: Deploy to Azure WebApp
+      # 1) instalar TODO (sí, también dev) para que exista "next"
+      - name: Install deps
+        run: npm ci
+
+      # 2) compilar el Next
+      - name: Build
+        run: npm run build
+
+      # 3) empaquetar PERO SIN excluir node_modules
+      - name: Pack app (include node_modules)
+        run: |
+          rm -rf .next/cache
+          zip -r release.zip . -x "*.git*"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: next-app
+          path: release.zip
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: next-app
+
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: .
+          package: release.zip
