@@ -1,4 +1,4 @@
-name: CI/CD - Next.js to Azure (con node_modules)
+name: CI/CD - Next.js standalone to Azure
 
 on:
   push:
@@ -6,13 +6,12 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: git-hub-app
-  NODE_VERSION: '22.x'   # puedes dejarlo en 22.x si quieres
+  AZURE_WEBAPP_NAME: xicocentral-01
+  NODE_VERSION: 22.x
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -23,19 +22,22 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
 
-      # 1) instalar TODO (sí, también dev) para que exista "next"
       - name: Install deps
         run: npm ci
 
-      # 2) compilar el Next
-      - name: Build
+      - name: Build (standalone)
         run: npm run build
 
-      # 3) empaquetar PERO SIN excluir node_modules
-      - name: Pack app (include node_modules)
+      # empaquetamos SOLO el standalone que generó Next
+      - name: Pack standalone
         run: |
-          rm -rf .next/cache
-          zip -r release.zip . -x "*.git*"
+          mkdir deploy
+          cp -r .next/standalone/* deploy/
+          mkdir -p deploy/.next
+          cp -r .next/static deploy/.next/static
+          # usamos el package.json de tu repo para que npm start exista
+          cp package.json deploy/
+          cd deploy && zip -r ../release.zip .
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
