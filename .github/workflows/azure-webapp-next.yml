@@ -1,59 +1,24 @@
-name: CI/CD - front_end_streaming_video to Azure Web App
+name: CI/CD - Next.js to Azure
 
 on:
   push:
-    branches: ["main"]
+    branches: [ "main" ]
   workflow_dispatch:
 
 env:
   AZURE_WEBAPP_NAME: git-hub-app
-  AZURE_WEBAPP_PACKAGE_PATH: "."
-  NODE_VERSION: "20.x"
+  NODE_VERSION: '20.x'
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build Next.js
-        run: npm run build
-
-      # empaquetamos todo menos node_modules y .git
-      - name: Archive app
-        run: |
-          zip -r release.zip . -x "*.git*" "node_modules/*"
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: next-app
-          path: release.zip
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: next-app
-
-      - name: Deploy to Azure Web App
+      - name: Deploy to Azure Web App (source, let Oryx build)
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: release.zip
+          package: .    # 👈 mandamos el código, NO un zip
