@@ -26,19 +26,24 @@ jobs:
         run: npm ci
 
       - name: Build (standalone)
-        run: npm run build
         env:
+          NODE_ENV: production
+          NEXT_TELEMETRY_DISABLED: 1
           NEXT_PUBLIC_API_BASE_URL: ${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
+        run: npm run build
 
-      # empaquetamos SOLO el standalone que generó Next
+      # Empaquetamos el artefacto standalone que genera Next
       - name: Pack standalone
         run: |
-          mkdir deploy
+          rm -rf deploy && mkdir -p deploy/.next
+          # 1) Copia TODO el runtime standalone (incluye server.js + node_modules mínimos)
           cp -r .next/standalone/* deploy/
-          mkdir -p deploy/.next
+          # 2) Copia los assets estáticos y /public
           cp -r .next/static deploy/.next/static
-          # usamos el package.json de tu repo para que npm start exista
-          cp package.json deploy/
+          if [ -d public ]; then cp -r public deploy/public; fi
+          # 3) Usa el package.json generado por Next (NO el del repo)
+          cp .next/standalone/package.json deploy/
+          # 4) Comprimir
           cd deploy && zip -r ../release.zip .
 
       - name: Upload artifact
